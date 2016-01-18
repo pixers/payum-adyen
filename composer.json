@@ -1,0 +1,45 @@
+{
+    "name": "NetTeam/payum-adyen",
+    "type": "library",
+    "description": "Adyen gateway for Payum",
+    "keywords": ["payment", "payum", "adyen"],
+    "homepage": "http://payum.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jacek Smyda",
+            "email": "jacek.smyda@netteam.pl"
+        },
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
+        },
+        {
+            "name":     "Payum project",
+            "homepage": "http://payum.org/"
+        },
+        {
+            "name":     "Community contributions",
+            "homepage": "https://github.com/Payum/AuthorizeNetAim/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "payum/core": "^1.1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Payum\\Adyen": "" }
+    },
+    "target-dir": "Payum/Adyen",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
