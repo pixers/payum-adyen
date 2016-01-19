@@ -8,6 +8,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 
 class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
@@ -38,9 +39,17 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $postData = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        // Check data
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+
+        if (null === $httpRequest->request['merchantReference']) {
+            throw new HttpResponse('[failed]', 400);
+        }
+
+        if ($details['skinCode'] != $httpRequest->query['skinCode']) {
+            throw new HttpResponse('[failed]', 400);
+        }
 
         throw new HttpResponse('[accepted]', 200);
     }

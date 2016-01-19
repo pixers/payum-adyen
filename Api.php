@@ -10,6 +10,47 @@ use Payum\Core\HttpClientInterface;
 
 class Api
 {
+    protected $requiredFields = [
+        'merchantReference' => null,
+        'paymentAmount' => null,
+        'currencyCode' => null,
+        'shipBeforeDate' => null,
+        'skinCode' => null,
+        'merchantAccount' => null,
+        'sessionValidity' => null,
+        'merchantReturnData' => null,
+        'shopperEmail' => null,
+    ];
+    protected $optionalFields = [
+        'shopperReference' => null,
+        'allowedMethods' => null,
+        'blockedMethods' => null,
+        'offset' => null,
+        'shopperStatement' => null,
+        'recurringContract' => null,
+        'billingAddressType' => null,
+        'deliveryAddressType' => null,
+    ];
+    protected $othersFields = [
+        'brandCode' => null,
+        'countryCode' => null,
+        'shopperLocale' => null,
+        'orderData' => null,
+        'offerEmail' => null,
+
+        'issuerId' => null,
+        'resURL' => null,
+    ];
+    protected $responseFields = [
+        'authResult' => null,
+        'pspReference' => null,
+        'merchantReference' => null,
+        'skinCode' => null,
+        'paymentMethod' => null,
+        'shopperLocale' => null,
+        'merchantReturnData' => null,
+    ];
+
     /**
      * @var HttpClientInterface
      */
@@ -51,12 +92,22 @@ class Api
 
     /**
      * @param array $params
+     * @param array $keys
      *
      * @return string
      */
-    public function merchantSig(array $params)
+    public function merchantSig(array $params, array $keys = null)
     {
-        unset($params['merchantSig']);
+        $keys = $keys ?: array_merge(array_keys($this->requiredFields), array_keys($this->optionalFields));
+
+        // Sign only not empty fields
+        $data = [];
+        foreach ($keys as $key) {
+            if (isset($params[$key])) {
+                $data[$key] = $params[$key];
+            }
+        }
+        $params = array_filter($data);
 
         // The character escape function
         $escape = function($val) {
@@ -93,35 +144,26 @@ class Api
     /**
      * @param array $params
      *
+     * @return bool
+     */
+    public function verifyNotification(array $params)
+    {
+        if (empty($params['merchantSig'])) {
+            return false;
+        }
+        $merchantSig = $params['merchantSig'];
+
+        return $merchantSig == $this->merchantSig($params, array_keys($this->responseFields));
+    }
+
+    /**
+     * @param array $params
+     *
      * @return array
      */
     public function prepareFields(array $params)
     {
-        $supportedParams = [
-            // Required
-            'merchantReference' => null,
-            'paymentAmount' => null,
-            'currencyCode' => null,
-            'shipBeforeDate' => null,
-            'skinCode' => null,
-            'merchantAccount' => null,
-            'sessionValidity' => null,
-            // Optional
-            'shopperLocale' => null,
-            'orderData' => null,
-            'merchantReturnData' => null,
-            'countryCode' => null,
-            'shopperEmail' => null,
-            'shopperReference' => null,
-            'allowedMethods' => null,
-            'blockedMethods' => null,
-            'offset' => null,
-            'brandCode' => null,
-            'issuerId' => null,
-            'shopperStatement' => null,
-            'offerEmail' => null,
-            'resURL' => null,
-        ];
+        $supportedParams = array_merge($this->requiredFields, $this->optionalFields, $this->othersFields);
 
         $params = array_filter(array_replace(
             $supportedParams,
@@ -195,6 +237,7 @@ class Api
 
         // Check response
         $result = $response->getBody()->getContents();
+        // TODO
 
         return $result;
     }
