@@ -18,10 +18,10 @@ class Api
         'skinCode' => null,
         'merchantAccount' => null,
         'sessionValidity' => null,
-        'merchantReturnData' => null,
         'shopperEmail' => null,
     ];
     protected $optionalFields = [
+        'merchantReturnData' => null,
         'shopperReference' => null,
         'allowedMethods' => null,
         'blockedMethods' => null,
@@ -30,6 +30,8 @@ class Api
         'recurringContract' => null,
         'billingAddressType' => null,
         'deliveryAddressType' => null,
+
+        'resURL' => null,
     ];
     protected $othersFields = [
         'brandCode' => null,
@@ -39,7 +41,6 @@ class Api
         'offerEmail' => null,
 
         'issuerId' => null,
-        'resURL' => null,
     ];
     protected $responseFields = [
         'authResult' => null,
@@ -88,6 +89,14 @@ class Api
         }
         $this->options = $options;
         $this->client = $client ?: HttpClientFactory::create();
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiEndpoint()
+    {
+        return sprintf('https://%s.adyen.com/hpp/select.shtml', $this->options['sandbox'] ? 'test' : 'live');
     }
 
     /**
@@ -163,6 +172,12 @@ class Api
      */
     public function prepareFields(array $params)
     {
+        $params['shipBeforeDate'] = date('Y-m-d', strtotime('+1 hour'));
+        $params['sessionValidity'] = date(DATE_ATOM, strtotime('+1 hour'));
+
+        $params['skinCode'] = $this->options['skinCode'];
+        $params['merchantAccount'] = $this->options['merchantAccount'];
+
         $supportedParams = array_merge($this->requiredFields, $this->optionalFields, $this->othersFields);
 
         $params = array_filter(array_replace(
@@ -175,7 +190,18 @@ class Api
         return $params;
     }
 
-    public function startHostedPaymentPages($id, $amount, $currency, $returnUrl, $method)
+    /**
+     * @param string $id
+     * @param float  $amount
+     * @param string $currency
+     * @param string $customerId
+     * @param string $customerEmail
+     * @param string $returnUrl
+     * @param string $method
+     *
+     * @return array
+     */
+    public function startHostedPaymentPages($id, $amount, $currency, $customerId, $customerEmail, $returnUrl, $method)
     {
         $params = [
             // Required
@@ -186,8 +212,9 @@ class Api
             'skinCode' => $this->options['skinCode'],
             'merchantAccount' => $this->options['merchantAccount'],
             'sessionValidity' => date(DATE_ATOM, strtotime('+1 hour')),
+            'shopperEmail' => $customerEmail,
             // Optional
-            'shopperReference' => '1',
+            'shopperReference' => $customerId,
             'resURL' => $returnUrl,
         ];
 
@@ -213,6 +240,8 @@ class Api
         }
 
         $params = $this->prepareFields($params);
+
+        return $params;
     }
 
     /**
@@ -237,16 +266,7 @@ class Api
 
         // Check response
         $result = $response->getBody()->getContents();
-        // TODO
 
         return $result;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
-    {
-        return sprintf('https://%s.adyen.com/hpp/select.shtml', $this->options['sandbox'] ? 'test' : 'live');
     }
 }

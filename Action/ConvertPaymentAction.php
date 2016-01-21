@@ -18,13 +18,18 @@ class ConvertPaymentAction extends GatewayAwareAction
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var PaymentInterface $payment */
+        /**
+         * @var PaymentInterface $payment
+         */
         $payment = $request->getSource();
+
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
+
         $details['merchantReference'] = $payment->getNumber();
         $details['paymentAmount'] = $payment->getTotalAmount();
         $details['shopperEmail'] = $payment->getClientEmail();
         $details['currencyCode'] = $payment->getCurrencyCode();
+        $details['shopperReference'] = $payment->getClientId();
 
         $request->setResult((array) $details);
     }

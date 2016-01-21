@@ -16,9 +16,42 @@ class StatusAction implements ActionInterface
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $request->markUnknown();
+        $postData = ArrayObject::ensureArrayObject($request->getModel());
+
+        if (true == isset($postData['skinCode'])) {
+            $request->markCaptured();
+
+            return;
+        }
+
+        if (false == isset($postData['authResult'])) {
+            $request->markNew();
+
+            return;
+        }
+
+        switch ($postData['authResult']) {
+            case null:
+                $request->markNew();
+                break;
+            case 'AUTHORISED':
+                $request->markAuthorized();
+                break;
+            case 'PENDING':
+                $request->markPending();
+                break;
+            case 'CANCELLED':
+                $request->markCanceled();
+                break;
+            case 'REFUSED':
+                $request->markRefunded();
+                break;
+            default:
+                $request->markUnknown();
+                break;
+
+        }
     }
 
     /**

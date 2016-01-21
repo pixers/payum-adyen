@@ -26,8 +26,8 @@ class AdyenGatewayFactory extends GatewayFactory
         $config->defaults([
             'payum.action.capture' => new CaptureAction(),
             'payum.action.notify' => new NotifyAction(),
-            'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
+            'payum.action.status' => new StatusAction(),
         ]);
 
         if (false == $config['payum.api']) {
@@ -52,6 +52,7 @@ class AdyenGatewayFactory extends GatewayFactory
                         'skinCode' => $config['skinCode'],
                         'merchantAccount' => $config['merchantAccount'],
                         'hmacKey' => $config['hmacKey'],
+                        'sandbox' => $config['sandbox'],
                     ],
                     $config['payum.http_client']
                 );

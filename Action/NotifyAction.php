@@ -51,6 +51,12 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
             throw new HttpResponse('[failed]', 400);
         }
 
+        if (false == $this->api->verifyNotification($httpRequest->request)) {
+            throw new HttpResponse('[failed]', 400);
+        }
+
+        $details['authResult'] = $httpRequest->request['authResult'];
+
         throw new HttpResponse('[accepted]', 200);
     }
 

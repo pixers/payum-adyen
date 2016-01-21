@@ -14,13 +14,13 @@ class StatusActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldMarkUnknownIfDetailsEmpty()
+    public function shouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
         $action->execute($status = new GetHumanStatus(array()));
 
-        $this->assertTrue($status->isUnknown());
+        $this->assertTrue($status->isNew());
     }
 
 }
