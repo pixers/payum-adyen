@@ -26,7 +26,7 @@ class ConvertPaymentAction extends GatewayAwareAction
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
         $details['merchantReference'] = $payment->getNumber();
-        $details['paymentAmount'] = $payment->getTotalAmount();
+        $details['paymentAmount'] = (int)($payment->getTotalAmount() * 100);
         $details['shopperEmail'] = $payment->getClientEmail();
         $details['currencyCode'] = $payment->getCurrencyCode();
         $details['shopperReference'] = $payment->getClientId();

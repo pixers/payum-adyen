@@ -13,7 +13,7 @@ $storage = $payum->getStorage($paymentClass);
 $payment = $storage->create();
 $payment->setNumber(uniqid());
 $payment->setCurrencyCode('EUR');
-$payment->setTotalAmount(123); // 1.23 EUR
+$payment->setTotalAmount(1.23); // 1.23 EUR
 $payment->setDescription('A description');
 $payment->setClientId('anId');
 $payment->setClientEmail('foo@example.com');
