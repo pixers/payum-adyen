@@ -47,7 +47,7 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
             throw new HttpResponse('[failed]', 400);
         }
 
-        if ($details['skinCode'] != $httpRequest->query['skinCode']) {
+        if ($details['merchantReference'] != $httpRequest->query['merchantReference']) {
             throw new HttpResponse('[failed]', 400);
         }
 

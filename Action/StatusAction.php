@@ -19,18 +19,6 @@ class StatusAction implements ActionInterface
 
         $postData = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (true == isset($postData['skinCode'])) {
-            $request->markCaptured();
-
-            return;
-        }
-
-        if (false == isset($postData['authResult'])) {
-            $request->markNew();
-
-            return;
-        }
-
         switch ($postData['authResult']) {
             case null:
                 $request->markNew();
@@ -45,12 +33,12 @@ class StatusAction implements ActionInterface
                 $request->markCanceled();
                 break;
             case 'REFUSED':
-                $request->markRefunded();
+            case 'ERROR':
+                $request->markFailed();
                 break;
             default:
                 $request->markUnknown();
                 break;
-
         }
     }
 
