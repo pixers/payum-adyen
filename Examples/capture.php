@@ -17,11 +17,11 @@ $gateway = $payum->getGateway($token->getGatewayName());
 if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
-        die();
+        exit();
     }
     if ($reply instanceof HttpPostRedirect) {
-        echo ($reply->getContent());
-        die();
+        echo($reply->getContent());
+        exit();
     }
 
     throw new \LogicException('Unsupported reply', null, $reply);
