@@ -42,6 +42,7 @@ class AdyenGatewayFactoryTest extends \PHPUnit_Framework_TestCase
             'merchantAccount' => '',
             'hmacKey' => '',
             'sandbox' => true,
+            'default_payment_fields' => [],
         ];
 
         $this->assertEquals($options, $config['payum.default_options']);

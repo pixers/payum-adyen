@@ -1,5 +1,7 @@
 # Adyen
 
+[![Build Status](https://travis-ci.org/NetTeam/payum-adyen.png?branch=master)](https://travis-ci.org/NetTeam/payum-adyen)
+
 The Payum extension for Adyen.
 
 Configuration:

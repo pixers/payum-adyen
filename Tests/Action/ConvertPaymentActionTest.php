@@ -66,5 +66,8 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $this->assertArrayHasKey('currencyCode', $details);
         $this->assertEquals('EUR', $details['currencyCode']);
+
+        $this->assertArrayHasKey('shopperReference', $details);
+        $this->assertEquals('theClientId', $details['shopperReference']);
     }
 }
