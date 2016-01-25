@@ -21,11 +21,14 @@ class AdyenGatewayFactory extends AbstractGatewayFactory
     {
         parent::addConfiguration($builder);
 
-        $builder->children()
-            ->scalarNode('skinCode')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('merchantAccount')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('hmacKey')->isRequired()->cannotBeEmpty()->end()
-            ->booleanNode('sandbox')->defaultTrue()->end()
+        $builder
+            ->children()
+                ->scalarNode('skinCode')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('merchantAccount')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('hmacKey')->isRequired()->cannotBeEmpty()->end()
+                ->booleanNode('sandbox')->defaultTrue()->end()
+                ->arrayNode('default_payment_fields')
+                ->end()
             ->end();
     }
 

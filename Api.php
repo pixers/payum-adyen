@@ -65,6 +65,8 @@ class Api
         'merchantAccount' => null,
         'hmacKey' => null,
         'sandbox' => null,
+        // List of values getting from conf
+        'default_payment_fields' => [],
     ];
 
     /**
@@ -78,11 +80,11 @@ class Api
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
-        $options->validateNotEmpty(array(
+        $options->validateNotEmpty([
             'skinCode',
             'merchantAccount',
             'hmacKey',
-        ));
+        ]);
 
         if (false == is_bool($options['sandbox'])) {
             throw new LogicException('The boolean sandbox option must be set.');
@@ -172,6 +174,10 @@ class Api
      */
     public function prepareFields(array $params)
     {
+        if (false != empty($this->options['default_payment_fields'])) {
+            $params = array_merge($params, (array) $this->options['default_payment_fields']);
+        }
+
         $params['shipBeforeDate'] = date('Y-m-d', strtotime('+1 hour'));
         $params['sessionValidity'] = date(DATE_ATOM, strtotime('+1 hour'));
 
