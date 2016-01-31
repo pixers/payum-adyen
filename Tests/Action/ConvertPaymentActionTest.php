@@ -59,7 +59,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertEquals('theNumber', $details['merchantReference']);
 
         $this->assertArrayHasKey('paymentAmount', $details);
-        $this->assertEquals(10, $details['paymentAmount']);
+        $this->assertEquals(10 * 100, $details['paymentAmount']);
 
         $this->assertArrayHasKey('shopperEmail', $details);
         $this->assertEquals('theClientEmail', $details['shopperEmail']);
