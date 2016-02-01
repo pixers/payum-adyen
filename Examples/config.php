@@ -1,7 +1,9 @@
 <?php
 // config.php
 
-require_once __DIR__.'/../../../../vendor/autoload.php';
+$autoload = is_file(__DIR__.'/../vendor/autoload.php') ? __DIR__.'/../vendor/autoload.php' : __DIR__.'/../../../../vendor/autoload.php';
+
+require_once $autoload;
 
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\Payment;
