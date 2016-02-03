@@ -10,6 +10,9 @@ use Payum\Core\HttpClientInterface;
 
 class Api
 {
+    /**
+     * @var array
+     */
     protected $requiredFields = [
         'merchantReference' => null,
         'paymentAmount' => null,
@@ -20,6 +23,9 @@ class Api
         'sessionValidity' => null,
         'shopperEmail' => null,
     ];
+    /**
+     * @var array
+     */
     protected $optionalFields = [
         'merchantReturnData' => null,
         'shopperReference' => null,
@@ -33,6 +39,9 @@ class Api
 
         'resURL' => null,
     ];
+    /**
+     * @var array
+     */
     protected $othersFields = [
         'brandCode' => null,
         'countryCode' => null,
@@ -42,6 +51,9 @@ class Api
 
         'issuerId' => null,
     ];
+    /**
+     * @var array
+     */
     protected $responseFields = [
         'authResult' => null,
         'pspReference' => null,
