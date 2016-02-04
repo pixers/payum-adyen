@@ -43,15 +43,15 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        if (null === $httpRequest->request['merchantReference']) {
+        if (!isset($httpRequest->request['merchantReference']) || empty($httpRequest->request['merchantReference'])) {
             throw new HttpResponse('[failed]', 400);
         }
 
-        if ($details['merchantReference'] != $httpRequest->query['merchantReference']) {
+        if (!isset($details['merchantReference']) || ($details['merchantReference'] != $httpRequest->request['merchantReference'])) {
             throw new HttpResponse('[failed]', 400);
         }
 
-        if (false == $this->api->verifyNotification($httpRequest->request)) {
+        if (false === $this->api->verifyNotification($httpRequest->request)) {
             throw new HttpResponse('[failed]', 400);
         }
 

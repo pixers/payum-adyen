@@ -17,9 +17,14 @@ class StatusAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $postData = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        switch ($postData['authResult']) {
+        if (!isset($details['authResult'])) {
+            $request->markNew();
+            return;
+        }
+
+        switch ($details['authResult']) {
             case null:
                 $request->markNew();
                 break;
