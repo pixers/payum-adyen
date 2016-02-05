@@ -65,7 +65,7 @@ class NotifyActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function throwIfQueryDoesNotHaveMerchantReference()
+    public function shouldSetErrorIfQueryDoesNotHaveMerchantReference()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -82,22 +82,15 @@ class NotifyActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
         $action->setApi($apiMock);
 
-        try {
-            $action->execute(new Notify([]));
-        } catch (HttpResponse $reply) {
-            $this->assertSame(400, $reply->getStatusCode());
-            $this->assertSame('[failed]', $reply->getContent());
-
-            return;
-        }
-
-        $this->fail('The exception is expected');
+        $action->execute($notify = new Notify([]));
+        $model = $notify->getModel();
+        $this->assertSame(401, $model['response_status']);
     }
 
     /**
      * @test
      */
-    public function throwIfDetailsMerchantReferenceDoesNotExist()
+    public function shouldSetErrorIfDetailsMerchantReferenceDoesNotExist()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -118,22 +111,15 @@ class NotifyActionTest extends GenericActionTest
 
         $details = new \ArrayObject([]);
 
-        try {
-            $action->execute(new Notify($details));
-        } catch (HttpResponse $reply) {
-            $this->assertSame(400, $reply->getStatusCode());
-            $this->assertSame('[failed]', $reply->getContent());
-
-            return;
-        }
-
-        $this->fail('The exception is expected');
+        $action->execute($notify = new Notify($details));
+        $model = $notify->getModel();
+        $this->assertSame(402, $model['response_status']);
     }
 
     /**
      * @test
      */
-    public function throwIfMerchantReferenceDoesNotMatchExpected()
+    public function shouldSetErrorIfMerchantReferenceDoesNotMatchExpected()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -156,22 +142,15 @@ class NotifyActionTest extends GenericActionTest
             'merchantReference' => 'SomeReference2',
         ]);
 
-        try {
-            $action->execute(new Notify($details));
-        } catch (HttpResponse $reply) {
-            $this->assertSame(400, $reply->getStatusCode());
-            $this->assertSame('[failed]', $reply->getContent());
-
-            return;
-        }
-
-        $this->fail('The exception is expected');
+        $action->execute($notify = new Notify($details));
+        $model = $notify->getModel();
+        $this->assertSame(402, $model['response_status']);
     }
 
     /**
      * @test
      */
-    public function throwIfQuerySignDoesNotMatchExpected()
+    public function shouldSetErrorIfQuerySignDoesNotMatchExpected()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -196,22 +175,15 @@ class NotifyActionTest extends GenericActionTest
             'merchantReference' => 'SomeReference'
         ]);
 
-        try {
-            $action->execute(new Notify($details));
-        } catch (HttpResponse $reply) {
-            $this->assertSame(400, $reply->getStatusCode());
-            $this->assertSame('[failed]', $reply->getContent());
-
-            return;
-        }
-
-        $this->fail('The exception is expected');
+        $action->execute($notify = new Notify($details));
+        $model = $notify->getModel();
+        $this->assertSame(403, $model['response_status']);
     }
 
     /**
      * @test
      */
-    public function throwIfSignIsOk()
+    public function shouldSetOkIfVerifyRequestIsOk()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -239,16 +211,10 @@ class NotifyActionTest extends GenericActionTest
             'merchantReference' => 'SomeReference',
         ]);
 
-        try {
-            $action->execute(new Notify($details));
-        } catch (HttpResponse $reply) {
-            $this->assertSame(200, $reply->getStatusCode());
-            $this->assertSame('[accepted]', $reply->getContent());
-
-            return;
-        }
-
-        $this->fail('The exception is expected');
+        $action->execute($notify = new Notify($details));
+        $model = $notify->getModel();
+        $this->assertSame(200, $model['response_status']);
+        $this->assertSame('result', $model['authResult']);
     }
 
     /**

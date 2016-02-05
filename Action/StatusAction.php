@@ -24,6 +24,13 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        if (isset($details['response_status'])) {
+            if (200 != $details['response_status']) {
+                $request->markFailed();
+            }
+            return;
+        }
+
         switch ($details['authResult']) {
             case null:
                 $request->markNew();

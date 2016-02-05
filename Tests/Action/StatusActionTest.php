@@ -26,6 +26,21 @@ class StatusActionTest extends GenericActionTest
     /**
      * @test
      */
+    public function shouldMarkFailedIfResponseStatusIsFailed()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus([
+            'authResult' => 'Something',
+            'response_status' => 400,
+        ]));
+
+        $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkNewIfAuthResultIsNull()
     {
         $action = new StatusAction();
