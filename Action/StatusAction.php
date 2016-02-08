@@ -31,6 +31,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
+        // Payment Response
         switch ($details['authResult']) {
             case null:
                 $request->markNew();

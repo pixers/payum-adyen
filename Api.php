@@ -63,6 +63,19 @@ class Api
         'shopperLocale' => null,
         'merchantReturnData' => null,
     ];
+    /**
+     * @var array
+     */
+    protected $notificationFields = [
+        'pspReference' => null,
+        'originalReference' => null,
+        'merchantAccountCode' => null,
+        'merchantReference' => null,
+        'amount.value' => null,
+        'amount.currency' => null,
+        'eventCode' => null,
+        'success' => null,
+    ];
 
     /**
      * @var HttpClientInterface
@@ -169,7 +182,7 @@ class Api
      *
      * @return bool
      */
-    public function verifyNotification(array $params)
+    public function verifyResponse(array $params)
     {
         if (empty($params['merchantSig'])) {
             return false;
@@ -177,6 +190,21 @@ class Api
         $merchantSig = $params['merchantSig'];
 
         return $merchantSig == $this->merchantSig($params, array_keys($this->responseFields));
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function verifyNotification(array $params)
+    {
+        if (empty($params['additionalData.hmacSignature'])) {
+            return false;
+        }
+        $merchantSig = $params['additionalData.hmacSignature'];
+
+        return $merchantSig == $this->merchantSig($params, array_keys($this->notificationFields));
     }
 
     /**

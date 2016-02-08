@@ -183,6 +183,84 @@ class NotifyActionTest extends GenericActionTest
     /**
      * @test
      */
+    public function shouldSetRefusedIfNotificationCodeIsAuthorizedAndNotSuccess()
+    {
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf(GetHttpRequest::class))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
+                $request->request = [
+                    'merchantReference' => 'SomeReference',
+                    'eventCode' => 'AUTHORISATION',
+                    'success' => 'false',
+                    'reason' => 'Reason',
+                ];
+            }));
+
+        $apiMock = $this->createApiMock();
+        $apiMock
+            ->expects($this->once())
+            ->method('verifyNotification')
+            ->willReturn(true);
+
+        $action = new NotifyAction();
+        $action->setGateway($gatewayMock);
+        $action->setApi($apiMock);
+
+        $details = new \ArrayObject([
+            'merchantReference' => 'SomeReference',
+        ]);
+
+        $action->execute($notify = new Notify($details));
+        $model = $notify->getModel();
+        $this->assertSame(200, $model['response_status']);
+        $this->assertSame('REFUSED', $model['authResult']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetAuthorisedIfNotificationCodeIsAuthorizedAndSuccess()
+    {
+        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf(GetHttpRequest::class))
+            ->will($this->returnCallback(function(GetHttpRequest $request) {
+                $request->request = [
+                    'merchantReference' => 'SomeReference',
+                    'eventCode' => 'AUTHORISATION',
+                    'success' => 'true',
+                    'reason' => '',
+                ];
+            }));
+
+        $apiMock = $this->createApiMock();
+        $apiMock
+            ->expects($this->once())
+            ->method('verifyNotification')
+            ->willReturn(true);
+
+        $action = new NotifyAction();
+        $action->setGateway($gatewayMock);
+        $action->setApi($apiMock);
+
+        $details = new \ArrayObject([
+            'merchantReference' => 'SomeReference',
+        ]);
+
+        $action->execute($notify = new Notify($details));
+        $model = $notify->getModel();
+        $this->assertSame(200, $model['response_status']);
+        $this->assertSame('AUTHORISED', $model['authResult']);
+    }
+
+    /**
+     * @test
+     */
     public function shouldSetOkIfVerifyRequestIsOk()
     {
         $gatewayMock = $this->createGatewayMock();
@@ -201,7 +279,7 @@ class NotifyActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('verifyNotification')
-            ->willReturn('value');
+            ->willReturn(true);
 
         $action = new NotifyAction();
         $action->setGateway($gatewayMock);

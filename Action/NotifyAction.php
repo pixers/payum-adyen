@@ -58,6 +58,18 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
             return;
         }
 
+        // Check notification code
+        if (isset($httpRequest->request['eventCode'])) {
+            $httpRequest->request['authResult'] = 'UNKNOWN';
+            if ('AUTHORISATION' == $httpRequest->request['eventCode']) {
+                if ('true' == $httpRequest->request['success']) {
+                    $httpRequest->request['authResult'] = 'AUTHORISED';
+                } elseif (!empty($httpRequest->request['reason'])) {
+                    $httpRequest->request['authResult'] = 'REFUSED';
+                }
+            }
+        }
+
         $details['authResult'] = $httpRequest->request['authResult'];
 
         $details['response_status'] = 200;
