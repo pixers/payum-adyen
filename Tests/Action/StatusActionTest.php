@@ -83,6 +83,20 @@ class StatusActionTest extends GenericActionTest
     /**
      * @test
      */
+    public function shouldMarkCaptureIfAuthResultIsCapture()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus([
+            'authResult' => 'CAPTURE',
+        ]));
+
+        $this->assertTrue($status->isCaptured());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkCanceledIfAuthResultIsCanceled()
     {
         $action = new StatusAction();
@@ -106,6 +120,48 @@ class StatusActionTest extends GenericActionTest
         ]));
 
         $this->assertTrue($status->isFailed());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkSuspendedIfAuthResultIsChargeback()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus([
+            'authResult' => 'CHARGEBACK',
+        ]));
+
+        $this->assertTrue($status->isSuspended());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkExpiredIfAuthResultIsExpire()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus([
+            'authResult' => 'EXPIRE',
+        ]));
+
+        $this->assertTrue($status->isExpired());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMarkRefundedIfAuthResultIsRefund()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus([
+            'authResult' => 'REFUND',
+        ]));
+
+        $this->assertTrue($status->isRefunded());
     }
 
     /**

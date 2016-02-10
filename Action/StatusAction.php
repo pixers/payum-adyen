@@ -37,17 +37,37 @@ class StatusAction implements ActionInterface
                 $request->markNew();
                 break;
             case 'AUTHORISED':
+            case 'AUTHORISATION':
                 $request->markAuthorized();
                 break;
             case 'PENDING':
                 $request->markPending();
                 break;
+            case 'CAPTURE':
+                $request->markCaptured();
+                break;
             case 'CANCELLED':
+            case 'CANCELLATION':
+            case 'CANCEL_OR_REFUND':
                 $request->markCanceled();
                 break;
             case 'REFUSED':
             case 'ERROR':
                 $request->markFailed();
+                break;
+            case 'NOTIFICATION_OF_CHARGEBACK':
+            case 'CHARGEBACK':
+            case 'CHARGEBACK_REVERSED':
+            case 'REFUND_FAILED':
+            case 'CAPTURE_FAILED':
+                $request->markSuspended();
+                break;
+            case 'EXPIRE':
+                $request->markExpired();
+                break;
+            case 'REFUND':
+            case 'REFUNDED_REVERSED':
+                $request->markRefunded();
                 break;
             default:
                 $request->markUnknown();
