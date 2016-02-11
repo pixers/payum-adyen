@@ -41,6 +41,21 @@ class StatusActionTest extends GenericActionTest
     /**
      * @test
      */
+    public function shouldMarkAuthorizedIfResponseStatusIsOkAndAuthResultIsAuthorised()
+    {
+        $action = new StatusAction();
+
+        $action->execute($status = new GetHumanStatus([
+            'authResult' => 'AUTHORISED',
+            'response_status' => 200,
+        ]));
+
+        $this->assertTrue($status->isAuthorized());
+    }
+
+    /**
+     * @test
+     */
     public function shouldMarkNewIfAuthResultIsNull()
     {
         $action = new StatusAction();

@@ -27,8 +27,8 @@ class StatusAction implements ActionInterface
         if (isset($details['response_status'])) {
             if (200 != $details['response_status']) {
                 $request->markFailed();
+                return;
             }
-            return;
         }
 
         // Payment Response

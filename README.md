@@ -72,6 +72,8 @@ class AcmePaymentBundle extends Bundle
 
 ### Configuration in config.yml:
 
+You should remember that HMAC is SHA-256 (SHA-1 is deprecated).
+
 ```yaml
 payum:
     gateways:
