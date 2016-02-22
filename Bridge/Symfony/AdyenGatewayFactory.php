@@ -27,6 +27,7 @@ class AdyenGatewayFactory extends AbstractGatewayFactory
                 ->scalarNode('merchantAccount')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('hmacKey')->isRequired()->cannotBeEmpty()->end()
                 ->booleanNode('sandbox')->defaultTrue()->end()
+                ->scalarNode('notification_method')->defaultValue('basic')->end()
                 ->arrayNode('default_payment_fields')
                 ->end()
             ->end();

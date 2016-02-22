@@ -42,6 +42,7 @@ class AdyenGatewayFactoryTest extends \PHPUnit_Framework_TestCase
             'merchantAccount' => '',
             'hmacKey' => '',
             'sandbox' => true,
+            'notification_method' => 'basic',
             'default_payment_fields' => [],
         ];
 

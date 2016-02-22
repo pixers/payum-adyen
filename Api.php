@@ -90,6 +90,8 @@ class Api
         'merchantAccount' => null,
         'hmacKey' => null,
         'sandbox' => null,
+        'notification_method' => null,
+        'notification_hmac' => null,
         // List of values getting from conf
         'default_payment_fields' => [],
     ];
@@ -129,10 +131,11 @@ class Api
     /**
      * @param array $params
      * @param array $keys
+     * @param string $hmacKey
      *
      * @return string
      */
-    public function merchantSig(array $params, array $keys = null)
+    public function merchantSig(array $params, array $keys = null, $hmacKey = 'hmacKey')
     {
         $keys = $keys ?: array_merge(array_keys($this->requiredFields), array_keys($this->optionalFields));
 
@@ -157,7 +160,7 @@ class Api
         $signData = implode(":", array_map($escape, array_merge(array_keys($params), array_values($params))));
 
         // base64-encode the binary result of the HMAC computation
-        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->options['hmacKey']), true));
+        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->options[$hmacKey]), true));
 
         return $merchantSig;
     }
@@ -189,7 +192,7 @@ class Api
         }
         $merchantSig = $params['merchantSig'];
 
-        return $merchantSig == $this->merchantSig($params, array_keys($this->responseFields));
+        return $merchantSig == $this->merchantSig($params, array_keys($this->responseFields), 'notification_hmac');
     }
 
     /**
@@ -199,6 +202,10 @@ class Api
      */
     public function verifyNotification(array $params)
     {
+        if (('basic' == $this->options['notification_method']) || (null === $this->options['notification_hmac'])) {
+            return true;
+        }
+
         if (empty($params['additionalData.hmacSignature'])) {
             return false;
         }

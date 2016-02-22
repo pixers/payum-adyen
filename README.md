@@ -84,6 +84,7 @@ payum:
                 skinCode: ADYEN_SKINCODE
                 merchantAccount: ADYEN_ACCOUNT
                 hmacKey: SECRET_KEY
+                notification_method: basic
                 default_payment_fields:
                     shopperLocale: de
                     ...

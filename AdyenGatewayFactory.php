@@ -36,6 +36,7 @@ class AdyenGatewayFactory extends GatewayFactory
                 'merchantAccount' => '',
                 'hmacKey' => '',
                 'sandbox' => true,
+                'notification_method' => 'basic',
                 'default_payment_fields' => [],
             ];
             $config->defaults($config['payum.default_options']);
@@ -54,6 +55,7 @@ class AdyenGatewayFactory extends GatewayFactory
                         'merchantAccount' => $config['merchantAccount'],
                         'hmacKey' => $config['hmacKey'],
                         'sandbox' => $config['sandbox'],
+                        'notification_method' => $config['notification_method'],
                         'default_payment_fields' => $config['default_payment_fields'],
                     ],
                     $config['payum.http_client']
