@@ -1,6 +1,6 @@
 # Adyen
 
-[![Build Status](https://travis-ci.org/NetTeam/payum-adyen.png?branch=master)](https://travis-ci.org/NetTeam/payum-adyen)
+[![Build Status](https://travis-ci.org/pixers/payum-adyen.png?branch=master)](https://travis-ci.org/pixers/payum-adyen)
 
 The Payum extension for Adyen.
 
@@ -11,7 +11,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run:
 
 ```bash
-php composer.phar require "netteam/payum-adyen"
+php composer.phar require "pixers/payum-adyen"
 ```
 
 ## Configuration

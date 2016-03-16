@@ -1,5 +1,5 @@
 {
-    "name": "NetTeam/payum-adyen",
+    "name": "pixers/payum-adyen",
     "type": "library",
     "description": "Adyen gateway for Payum",
     "keywords": ["payment", "payum", "adyen"],
