@@ -64,7 +64,7 @@ class AcmePaymentBundle extends Bundle
     {
         parent::build($container);
 
-        $extension = $container->getExtension('paum');
+        $extension = $container->getExtension('payum');
         $extension->addPaymentFactory(new AdyenGatewayFactory());
     }
 }
