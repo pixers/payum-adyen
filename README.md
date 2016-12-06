@@ -45,7 +45,7 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-## Symfony Integration
+## Symfony Integration (payum-bundle < 2.0)
 
 ### Add AdyenGatewayFactory to payum:
 ```php
@@ -77,7 +77,6 @@ You should remember that HMAC is SHA-256 (SHA-1 is deprecated).
 ```yaml
 payum:
     gateways:
-        ...
         adyen_gateway:
             adyen:
                 sandbox: true
@@ -87,15 +86,45 @@ payum:
                 notification_method: basic
                 default_payment_fields:
                     shopperLocale: de
-                    ...
-        ...
+```
+
+## Symfony Integration (payum-bundle >= 2.0)
+
+### Add AdyenGatewayFactory to payum in services.yml:
+
+```yaml
+    adyen_gateway:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [Payum\Adyen\AdyenGatewayFactory]
+        tags:
+            - { name: payum.gateway_factory_builder, factory: adyen_gateway }
+```
+
+### Configuration in config.yml:
+
+You should remember that HMAC is SHA-256 (SHA-1 is deprecated).
+
+```yaml
+payum:
+    gateways:
+        adyen_gateway:
+            factory: adyen
+            sandbox: true
+            skinCode: ADYEN_SKINCODE
+            merchantAccount: ADYEN_ACCOUNT
+            hmacKey: SECRET_KEY
+            notification_method: basic
+            default_payment_fields:
+                shopperLocale: de
 ```
 
 ## Resources
 
-* [Payum Documentation](http://payum.org/doc)
+* [Payum Repository](https://github.com/Payum/Payum)
 * [Adyen Documentation](https://docs.adyen.com/manuals)
 
 ## License
 
-Adyen plugin is released under the [BSD License](LICENSE).
+Copyright 2016 PIXERS Ltd - www.pixersize.com
+
+Licensed under the [BSD 3-Clause](LICENSE)
