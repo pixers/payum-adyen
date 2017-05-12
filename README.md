@@ -1,6 +1,6 @@
-# Adyen
+# Adyen (test fork by Manuel Gomez)
 
-[![Build Status](https://travis-ci.org/pixers/payum-adyen.png?branch=master)](https://travis-ci.org/pixers/payum-adyen)
+[![Build Status](https://travis-ci.org/manuelgomez-urbanara/payum-adyen.png?branch=master)](https://travis-ci.org/manuelgomez-urbanara/payum-adyen)
 
 The Payum extension for Adyen.
 
